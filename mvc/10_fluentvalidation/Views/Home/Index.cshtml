@@ -1,0 +1,42 @@
+﻿@model _10_fluentvalidation.ViewModels.homePageViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h2>Home Page</h2>
+</div>
+<form asp-action="Submit" method="POST">
+    <div class="form-group">
+        <label asp-for="KisiNesnesi.Ad" class="control-label"></label>
+        <input asp-for="KisiNesnesi.Ad" class="form-control" />
+        <span asp-validation-for="KisiNesnesi.Ad" class="text-danger"></span> @* Hata mesajını gösterir *@
+    </div>
+    <div class="form-group">
+        <label asp-for="KisiNesnesi.Soyad" class="control-label"></label>
+        <input asp-for="KisiNesnesi.Soyad" class="form-control" />
+        <span asp-validation-for="KisiNesnesi.Soyad" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="KisiNesnesi.Yas" class="control-label"></label>
+        <input asp-for="KisiNesnesi.Yas" class="form-control" />
+        <span asp-validation-for="KisiNesnesi.Yas" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AdresNesnesi.Sehir" class="control-label"></label>
+        <input asp-for="AdresNesnesi.Sehir" class="form-control" />
+        <span asp-validation-for="AdresNesnesi.Sehir" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AdresNesnesi.AdresTanim" class="control-label"></label>
+        <textarea asp-for="AdresNesnesi.AdresTanim" class="form-control"></textarea>
+        <span asp-validation-for="AdresNesnesi.AdresTanim" class="text-danger"></span>
+    </div>
+    <div>
+        <input type="submit" value="Send Form" class="btn btn-danger mt-2" />
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
