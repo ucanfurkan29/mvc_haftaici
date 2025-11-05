@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">ViewData, ViewBag, TempData</h1>
+    <p>ViewBag: @ViewBag.ad</p>
+
+    @foreach(var item in ViewBag.liste)
+    {
+        <p>@item</p>
+    }
+    <p>@ViewBag.sonuc</p>
+
+    <p>ViewData: @ViewData["soyad"]</p>
+
+</div>
