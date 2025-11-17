@@ -1,0 +1,121 @@
+﻿@model List<_13_State_Management.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Alışveriş Sepeti";
+    decimal toplamTutar = Model?.Sum(x => x.TotalPrice) ?? 0;
+}
+
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1 class="display-4">🛒 Alışveriş Sepeti</h1>
+        <p class="lead">Session ile sepet yönetimi</p>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5>📋 Sepet İçeriği (@Model.Count ürün)</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>🏷️ Ürün Adı</th>
+                                <th>💰 Birim Fiyat</th>
+                                <th>📦 Adet</th>
+                                <th>💵 Toplam</th>
+                                <th>🗑️ İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><strong>@item.ProductName</strong></td>
+                                    <td>@item.Price.ToString("C", new System.Globalization.CultureInfo("tr-TR"))</td>
+                                    <td>
+                                        <span class="badge bg-primary">@item.Quantity</span>
+                                    </td>
+                                    <td><strong>@item.TotalPrice.ToString("C", new System.Globalization.CultureInfo("tr-TR"))</strong></td>
+                                    <td>
+                                        <a href="@Url.Action("RemoveFromCart", new { id = item.ProductId })"
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('Bu ürünü sepetten çıkarmak istediğinizden emin misiniz?')">
+                                            🗑️ Çıkar
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot class="table-dark">
+                            <tr>
+                                <th colspan="3">💰 GENEL TOPLAM</th>
+                                <th>@toplamTutar.ToString("C", new System.Globalization.CultureInfo("tr-TR"))</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🛒 SEPET İŞLEMLERİ -->
+        <div class="mt-4 text-center">
+            <div class="btn-group" role="group">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">🏠 Alışverişe Devam</a>
+                <a href="@Url.Action("ClearCart")" class="btn btn-outline-danger"
+                   onclick="return confirm('Sepeti tamamen temizlemek istediğinizden emin misiniz?')">
+                    🗑️ Sepeti Temizle
+                </a>
+                <button type="button" class="btn btn-success" onclick="alert('💳 Ödeme işlemi demo için aktif değil!')">
+                    💳 Ödemeye Geç
+                </button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- 🛒 BOŞ SEPET -->
+        <div class="text-center">
+            <div class="card">
+                <div class="card-body py-5">
+                    <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+                    <h3 class="text-muted">Sepetiniz Boş</h3>
+                    <p class="text-muted">Henüz sepetinize ürün eklemediniz.</p>
+
+                    <hr class="my-4">
+
+                    <h5>🛍️ Hemen Ürün Ekleyin:</h5>
+                    <div class="btn-group-vertical" role="group">
+                        <a href="@Url.Action("AddToCart", new { id = 1, name = "Laptop", price = 15000 })" class="btn btn-outline-success mb-2">
+                            💻 Laptop Ekle (15.000₺)
+                        </a>
+                        <a href="@Url.Action("AddToCart", new { id = 2, name = "Mouse", price = 250 })" class="btn btn-outline-success mb-2">
+                            🖱️ Mouse Ekle (250₺)
+                        </a>
+                        <a href="@Url.Action("AddToCart", new { id = 3, name = "Klavye", price = 500 })" class="btn btn-outline-success mb-2">
+                            ⌨️ Klavye Ekle (500₺)
+                        </a>
+                        <a href="@Url.Action("AddToCart", new { id = 4, name = "Monitör", price = 3000 })" class="btn btn-outline-success mb-2">
+                            🖥️ Monitör Ekle (3.000₺)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">🏠 Ana Sayfaya Dön</a>
+    </div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999;">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}

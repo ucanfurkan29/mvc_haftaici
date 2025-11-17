@@ -1,0 +1,171 @@
+﻿@{
+    ViewData["Title"] = "State Management Demo";
+
+    // 🔍 Mevcut değerleri oku
+    var sessionUserName = ViewBag.SessionUserName as string ?? "Ayarlanmamış";
+    var cookieTheme = ViewBag.CookieTheme as string ?? "Light";
+    var cookieLanguage = ViewBag.CookieLanguage as string ?? "TR";
+    var sessionTheme = Context.Session.GetString("Theme") ?? "Ayarlanmamış";
+}
+
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4">🔧 State Management Demo</h1>
+        <p class="lead">Session ve Cookie örnekleri</p>
+    </div>
+
+    <!-- 📊 DURUM BİLGİLERİ -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5>📊 Session Verileri (Geçici)</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>👤 Kullanıcı Adı:</strong> @sessionUserName</p>
+                    <p><strong>🎨 Tema:</strong> @sessionTheme</p>
+                    <p><strong>📊 Ziyaret Sayısı:</strong> @(Context.Session.GetInt32("VisitCount") ?? 0)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5>🍪 Cookie Verileri (Kalıcı)</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>🎨 Tema:</strong> @cookieTheme</p>
+                    <p><strong>🌍 Dil:</strong> @cookieLanguage</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📝 SESSION İŞLEMLERİ -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5>📝 Session İşlemleri</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="SetSession" class="mb-3">
+                        <div class="input-group">
+                            <input type="text" name="userName" class="form-control" placeholder="Kullanıcı adı girin">
+                            <button type="submit" class="btn btn-primary">📝 Session Ayarla</button>
+                        </div>
+                    </form>
+
+                    <div class="btn-group" role="group">
+                        <a href="@Url.Action("GetSession")" class="btn btn-outline-info">🔍 Session Oku</a>
+                        <a href="@Url.Action("ClearSession")" class="btn btn-outline-danger">🗑️ Session Temizle</a>
+                        <a href="@Url.Action("Demo")" class="btn btn-outline-success">📋 Demo Sayfası</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🎨 TEMA VE DİL SEÇİMİ -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5>🎨 Tema Seçimi</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Session ile (Geçici):</h6>
+                    <div class="btn-group mb-3" role="group">
+                        <a href="@Url.Action("SetTheme", "Theme", new { theme = "dark" })" class="btn btn-dark">🌙 Dark</a>
+                        <a href="@Url.Action("SetTheme", "Theme", new { theme = "light" })" class="btn btn-light">☀️ Light</a>
+                    </div>
+
+                    <h6>Cookie ile (Kalıcı):</h6>
+                    <form method="post" asp-action="SetCookie">
+                        <div class="btn-group" role="group">
+                            <button type="submit" name="theme" value="dark" class="btn btn-outline-dark">🌙 Dark Cookie</button>
+                            <button type="submit" name="theme" value="light" class="btn btn-outline-warning">☀️ Light Cookie</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5>🌍 Dil Seçimi</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Cookie ile (Kalıcı):</h6>
+                    <div class="btn-group mb-3" role="group">
+                        <a href="@Url.Action("SetLanguage", "Language", new { language = "tr" })" class="btn btn-primary">🇹🇷 Türkçe</a>
+                        <a href="@Url.Action("SetLanguage", "Language", new { language = "en" })" class="btn btn-secondary">🇺🇸 English</a>
+                    </div>
+
+                    <h6>Session ile (Geçici):</h6>
+                    <form method="post" asp-action="SetCookie">
+                        <div class="btn-group" role="group">
+                            <button type="submit" name="language" value="tr" class="btn btn-outline-primary">🇹🇷 TR Session</button>
+                            <button type="submit" name="language" value="en" class="btn btn-outline-secondary">🇺🇸 EN Session</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🛒 ALIŞVERİŞ SEPETİ -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5>🛒 Alışveriş Sepeti (Session)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group mb-3" role="group">
+                        <a href="@Url.Action("AddToCart", "ShoppingCart", new { id = 1, name = "Laptop", price = 15000 })" class="btn btn-success">💻 Laptop Ekle (15.000₺)</a>
+                        <a href="@Url.Action("AddToCart", "ShoppingCart", new { id = 2, name = "Mouse", price = 250 })" class="btn btn-success">🖱️ Mouse Ekle (250₺)</a>
+                        <a href="@Url.Action("AddToCart", "ShoppingCart", new { id = 3, name = "Klavye", price = 500 })" class="btn btn-success">⌨️ Klavye Ekle (500₺)</a>
+                    </div>
+                    <br>
+                    <a href="@Url.Action("Index", "ShoppingCart")" class="btn btn-primary">🛒 Sepeti Görüntüle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🗑️ TEMİZLEME İŞLEMLERİ -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5>🗑️ Temizleme İşlemleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        <a href="@Url.Action("ClearSession")" class="btn btn-outline-danger">🗑️ Session Temizle</a>
+                        <a href="@Url.Action("DeleteCookies")" class="btn btn-outline-danger">🗑️ Cookie'leri Sil</a>
+                        <a href="@Url.Action("ClearCart", "ShoppingCart")" class="btn btn-outline-danger">🗑️ Sepeti Temizle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999;">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show position-fixed" style="top: 20px; right: 20px; z-index: 9999;">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}

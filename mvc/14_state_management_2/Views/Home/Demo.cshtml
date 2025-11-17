@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Session Demo";
+}
+
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4">📋 Session Demo Sayfası</h1>
+        <p class="lead">Session verilerinin detaylı görünümü</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5>📊 Session İstatistikleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>👤 Kullanıcı Bilgileri:</h6>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <strong>Ad:</strong> @(Context.Session.GetString("UserName") ?? "Ayarlanmamış")
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Ziyaret Sayısı:</strong> @ViewBag.SessionCount
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Son Ziyaret:</strong> @(ViewBag.LastVisit ?? "İlk ziyaret")
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>🎨 Tercih Bilgileri:</h6>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <strong>Tema (Session):</strong> @(Context.Session.GetString("Theme") ?? "Ayarlanmamış")
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Dil (Session):</strong> @(Context.Session.GetString("Language") ?? "Ayarlanmamış")
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Session ID:</strong> @Context.Session.Id
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("Index")" class="btn btn-primary">🏠 Ana Sayfaya Dön</a>
+                    <a href="@Url.Action("ClearSession")" class="btn btn-outline-danger">🗑️ Session Temizle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

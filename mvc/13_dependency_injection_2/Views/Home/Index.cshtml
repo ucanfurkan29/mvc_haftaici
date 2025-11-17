@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+  <h1>Dependency Injection LifeCycle Test</h1>
+  <h2>Transient</h2>
+    <p>İlk Değer:@ViewBag.TransientValue1</p>
+    <p>İkinci Değer:@ViewBag.TransientValue2</p>
+    <p><strong>Açıklama:</strong>Transient her çağırıldığında farklı bir değer üretir</p>
+
+    <h2>Scoped</h2>
+    <p>İlk değer:@ViewBag.ScopedValue1</p>
+    <p>İkinci değer:@ViewBag.ScopedValue2</p>
+    <p><strong>Açıklama:</strong>Scoped Aynı Http isteğinde aynı değeri kullanır</p>
+
+    <h2>Singleton</h2>
+    <p>İlk değer:@ViewBag.SingletonValue1</p>
+    <p>İkinci değer:@ViewBag.SingletonValue2</p>
+    <p><strong>Açıklama:</strong>Singleton Uygulama boyunca aynı istek üzerinden cevap verir değişmez</p>
+</div>
