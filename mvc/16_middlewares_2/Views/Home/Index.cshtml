@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "Middleware Demo";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- 🎯 Ana Başlık -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 text-primary">
+                    <i class="fas fa-cogs"></i> Middleware Demo
+                </h1>
+                <p class="lead text-muted">
+                    Her sayfa yüklenişinde middleware'ler çalışır ve süreyi ölçer
+                </p>
+            </div>
+
+            <!-- 📊 Middleware Bilgi Kartları -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card border-primary">
+                        <div class="card-header bg-primary text-white">
+                            <h5><i class="fas fa-stopwatch"></i> Timing Middleware</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Her HTTP isteğinin süresini ölçer ve konsola yazdırır.</p>
+                            <small class="text-muted">Response header'a da ekler</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-success">
+                        <div class="card-header bg-success text-white">
+                            <h5><i class="fas fa-shield-alt"></i> Security</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>HTTPS yönlendirme ve güvenlik başlıkları ekler.</p>
+                            <small class="text-muted">Production ortamında aktif</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-info">
+                        <div class="card-header bg-info text-white">
+                            <h5><i class="fas fa-route"></i> Routing</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>URL'leri doğru controller ve action'lara yönlendirir.</p>
+                            <small class="text-muted">MVC pattern için gerekli</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🧪 Test Butonları -->
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-flask"></i> Middleware Test Alanı</h5>
+                </div>
+                <div class="card-body">
+                    <p>Farklı sayfalara giderek middleware'lerin çalışmasını gözlemleyin:</p>
+
+                    <div class="btn-group-vertical w-100" role="group">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-outline-primary mb-2">
+                            <i class="fas fa-home"></i> Ana Sayfa (Hızlı)
+                        </a>
+                        <a href="@Url.Action("SlowPage", "Home")" class="btn btn-outline-warning mb-2">
+                            <i class="fas fa-hourglass-half"></i> Yavaş Sayfa (2 saniye gecikme)
+                        </a>
+                        <a href="@Url.Action("Privacy", "Home")" class="btn btn-outline-info mb-2">
+                            <i class="fas fa-user-secret"></i> Privacy Sayfası
+                        </a>
+                        <button onclick="makeAjaxRequest()" class="btn btn-outline-success mb-2">
+                            <i class="fas fa-bolt"></i> AJAX İsteği Gönder
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 📈 Sonuçlar -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-line"></i> Sonuçlar</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>💡 İpucu:</strong>
+                        <ul class="mb-0">
+                            <li>Visual Studio'da <strong>Output</strong> penceresini açın</li>
+                            <li>Konsol çıktısını görmek için <strong>Debug</strong> seçin</li>
+                            <li>Tarayıcıda <strong>F12</strong> açıp <strong>Network</strong> sekmesinde response header'ları kontrol edin</li>
+                        </ul>
+                    </div>
+
+                    <div id="ajaxResults" class="mt-3" style="display: none;">
+                        <h6>AJAX Sonucu:</h6>
+                        <pre id="ajaxOutput" class="bg-light p-3 rounded"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 📜 JavaScript -->
+<script>
+    // 🚀 AJAX isteği fonksiyonu
+    async function makeAjaxRequest() {
+        const startTime = performance.now();
+
+        try {
+            const response = await fetch('@Url.Action("Index", "Home")');
+            const endTime = performance.now();
+            const duration = (endTime - startTime).toFixed(2);
+
+            // Response header'dan middleware süresini al
+            const middlewareTime = response.headers.get('X-Response-Time');
+
+            const result = {
+                status: response.status,
+                statusText: response.statusText,
+                clientSideDuration: `${duration}ms`,
+                middlewareTime: middlewareTime || 'Bulunamadı',
+                url: response.url
+            };
+
+            document.getElementById('ajaxResults').style.display = 'block';
+            document.getElementById('ajaxOutput').textContent = JSON.stringify(result, null, 2);
+
+        } catch (error) {
+            document.getElementById('ajaxResults').style.display = 'block';
+            document.getElementById('ajaxOutput').textContent = `Hata: ${error.message}`;
+        }
+    }
+
+    // 📊 Sayfa yüklenme süresini göster
+    window.addEventListener('load', function() {
+        const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+        console.log(`📊 Sayfa yüklenme süresi: ${loadTime}ms`);
+    });
+</script>
+
+<!-- 🎨 Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
