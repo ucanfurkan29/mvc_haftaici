@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
+    <script>
+        $.ajax({
+            url:"https://localhost:7010/api/Product/GetProducts",
+            type:"Get",
+            data:{
+                page:1,
+                pageSize:10
+            },
+            success:function(response){
+                console.log("Veri başarı ile alındı",response)
+            },
+            error:function(xhr,status,error){
+                console.log("Hata Oluştu",error)
+            }
+        })
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
