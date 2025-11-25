@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <form method="post" asp-action="AddData" asp-controller="Home" class="mb-3">
+        <button type="submit" class="btn btn-primary">Add Data to Database</button>
+    </form>
+    <form method="post" asp-action="AddDataSecure" asp-controller="Home" class="mb-3">
+        <div>
+            <input type="text" name="FirstName" placeholder="FirstName" class="mb-3" required />
+        </div>
+        <div>
+            <input type="text" name="LastName" placeholder="LastName" class="mb-3" required />
+        </div>
+        <div>
+            <input type="text" name="Age" placeholder="Age" class="mb-3" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Add Data Securely to Database</button>
+    </form>
+    <a href="/Home/GetData" class="btn btn-primary">Get Students</a>
+    <a href="/Home/GetCount" class="btn btn-primary">Get Students Count</a>
+
+        
+</div>
